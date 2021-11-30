@@ -1,4 +1,4 @@
-GPFSEL0 EQU     0x3F000000 ; Direccion inicial seleccion de modo
+GPFSEL0 EQU     0x3F200000 ; Direccion inicial seleccion de modo
 GPFSEL5 EQU     GPFSEL0 + 20 ; Direccion final seleccion de modo
 GPSET0  EQU     GPFSEL5 + 8 ; Direccion inicial encendido
 GPSCLR0 EQU     GPSET0 + 12 ; Direccion inicial apagado
