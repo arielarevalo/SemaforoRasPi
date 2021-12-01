@@ -6,6 +6,8 @@
 .text
 .section .init
 .globl _start
+.globl _wait
+.globl _setup
 _start:
     bl setup
 
@@ -20,7 +22,7 @@ _start:
     str r1,[r2]
 
     mov r2,#0x3F0000
-wait1$:
+_wait:
     sub r2,#1
     cmp r2,#0
     bne wait1$
@@ -28,7 +30,7 @@ wait1$:
     bl setup
 .end
 
-setup:
+_setup:
     push {lr}
     mov r1, #0
     ldr r2, =GPFSEL0
@@ -38,6 +40,3 @@ setup:
     cmp r2, r3
     bne mode
     pop {pc}
-
-loop: 
-b loop
