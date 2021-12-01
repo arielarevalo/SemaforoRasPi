@@ -1,24 +1,43 @@
-GPFSEL0 EQU     0x3F200000 ; Direccion inicial seleccion de modo
-GPFSEL5 EQU     GPFSEL0 + 20 ; Direccion final seleccion de modo
-GPSET0  EQU     GPFSEL5 + 8 ; Direccion inicial encendido
-GPSCLR0 EQU     GPSET0 + 12 ; Direccion inicial apagado
+.equ GPFSEL0, 0x3F200000
+.equ GPFSEL5, GPFSEL0 + 20 // Direccion final seleccion de modo
+.equ GPSET0, GPFSEL5 + 8 // Direccion inicial encendido
+.equ GPSCLR0, GPSET0 + 12 // Direccion inicial apagado
 
-ENTRY   
+.text
+.section .init
+.globl _start
+_start:
+    bl setup
 
-SETUP   LDR     R1, =0 ; FSEL set to INPUT (000000000000000000000000000000)
-        LDR     R2, =GPFSEL0
-        LDR     R3, =GPFSEL5 + 4
+    ldr r2, =GPFSEL0
+    mov r1, #1
+    lsl r1, #12
+    str r1, [r2]
 
-MOD0    STR     R1, [R2],#4
-        CMP     R2, R3
-        BNE     MODE ; Todos los pines en INPUT
+    ldr r1, =GPSET0
+    mov r1, #1
+    lsl r1, #4
+    str r1,[r2]
 
-        ; CAMBIOS DE SEMAFORO
+    mov r2,#0x3F0000
+wait1$:
+    sub r2,#1
+    cmp r2,#0
+    bne wait1$
 
-TRDWN   LDR     R1, =0 ; FSEL set to INPUT (000000000000000000000000000000)
-        LDR     R2, =GPFSEL0
-        LDR     R3, =GPFSEL5 + 4
+    bl setup
+.end
 
-MOD1    STR     R1, [R2],#4
-        CMP     R2, R3
-        BNE     MODE ; Todos los pines en INPUT
+setup:
+    push {lr}
+    mov r1, #0
+    ldr r2, =GPFSEL0
+    ldr r3, =GPFSEL5 + 4
+
+    str r1, [r2],#4
+    cmp r2, r3
+    bne mode
+    pop {pc}
+
+loop: 
+b loop
