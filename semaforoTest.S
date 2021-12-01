@@ -4,6 +4,17 @@
 .equ GPSCLR0, GPSET0 + 12 // Direccion inicial apagado
 
 .text
+_setup:
+    push {lr}
+    mov r1, #0
+    ldr r2, =GPFSEL0
+    ldr r3, =GPFSEL5 + 4
+
+    str r1, [r2],#4
+    cmp r2, r3
+    bne mode
+    pop {pc}
+
 .section .init
 .globl _start
 .globl _wait
@@ -29,14 +40,3 @@ _wait:
 
     bl _setup
 .end
-
-_setup:
-    push {lr}
-    mov r1, #0
-    ldr r2, =GPFSEL0
-    ldr r3, =GPFSEL5 + 4
-
-    str r1, [r2],#4
-    cmp r2, r3
-    bne mode
-    pop {pc}
