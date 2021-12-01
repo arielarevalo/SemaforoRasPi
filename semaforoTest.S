@@ -9,7 +9,7 @@
 .globl _wait
 .globl _setup
 _start:
-    bl setup
+    bl _setup
 
     ldr r2, =GPFSEL0
     mov r1, #1
@@ -25,9 +25,9 @@ _start:
 _wait:
     sub r2,#1
     cmp r2,#0
-    bne wait1$
+    bne _wait
 
-    bl setup
+    bl _setup
 .end
 
 _setup:
