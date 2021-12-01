@@ -9,16 +9,15 @@ _setup:
     mov r1, #0
     ldr r2, =GPFSEL0
     ldr r3, =GPFSEL5 + 4
-
+mode:
     str r1, [r2],#4
     cmp r2, r3
     bne mode
     pop {pc}
 
 .section .init
-.globl _start
-.globl _wait
 .globl _setup
+.globl _start
 _start:
     bl _setup
 
@@ -33,10 +32,10 @@ _start:
     str r1,[r2]
 
     mov r2,#0x3F0000
-_wait:
+wait:
     sub r2,#1
     cmp r2,#0
-    bne _wait
+    bne wait
 
     bl _setup
 .end
